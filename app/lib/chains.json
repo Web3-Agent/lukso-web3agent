@@ -1,5 +1,39 @@
 [
   {
+    "name": "Scroll Sepolia",
+    "title": "Scroll Sepolia Testnet",
+    "chain": "ETH",
+    "rpc": [
+      "https://scroll-sepolia-testnet.rpc.thirdweb.com",
+      "wss://sepolia.infura.io/v3/${INFURA_API_KEY}",
+      "https://sepolia-rpc.scroll.io/"
+    ],
+    "faucets": [
+      "http://fauceth.komputing.org?chain=5&address=${ADDRESS}",
+      "https://goerli-faucet.slock.it?address=${ADDRESS}",
+      "https://faucet.goerli.mudit.blog"
+    ],
+    "nativeCurrency": {
+      "name": "Sepolia Ether",
+      "symbol": "ETH",
+      "decimals": 18
+    },
+    "infoURL": "https://goerli.net/#about",
+    "shortName": "gor",
+    "chainId": 534351,
+    "networkId": 534351,
+    "ens": {
+      "registry": "0x112234455c3a32fd11230c42e7bccd4a84e02010"
+    },
+    "explorers": [
+      {
+        "name": "etherscan-goerli",
+        "url": "https://sepolia.scrollscan.dev",
+        "standard": "EIP3091"
+      }
+    ]
+  },
+  {
     "name": "Ethereum",
     "chain": "ETH",
     "icon": "ethereum",
