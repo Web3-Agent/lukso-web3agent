@@ -1,12 +1,10 @@
 [
   {
-    "name": "Scroll Sepolia",
-    "title": "Scroll Sepolia Testnet",
-    "chain": "ETH",
+    "name": "LUKSO Testnet",
+    "title": "LUKSO Testnet",
+    "chain": "LYXt",
     "rpc": [
-      "https://scroll-sepolia-testnet.rpc.thirdweb.com",
-      "wss://sepolia.infura.io/v3/${INFURA_API_KEY}",
-      "https://sepolia-rpc.scroll.io/"
+      "https://rpc.testnet.lukso.network"
     ],
     "faucets": [
       "http://fauceth.komputing.org?chain=5&address=${ADDRESS}",
@@ -14,21 +12,21 @@
       "https://faucet.goerli.mudit.blog"
     ],
     "nativeCurrency": {
-      "name": "Sepolia Ether",
-      "symbol": "ETH",
+      "name": "LUKSO Testnet",
+      "symbol": "LYXt",
       "decimals": 18
     },
     "infoURL": "https://goerli.net/#about",
     "shortName": "gor",
-    "chainId": 534351,
-    "networkId": 534351,
+    "chainId": 4201,
+    "networkId": 4201,
     "ens": {
       "registry": "0x112234455c3a32fd11230c42e7bccd4a84e02010"
     },
     "explorers": [
       {
         "name": "etherscan-goerli",
-        "url": "https://sepolia.scrollscan.dev",
+        "url": "https://explorer.execution.testnet.lukso.network/tx/",
         "standard": "EIP3091"
       }
     ]
@@ -3879,34 +3877,6 @@
         "standard": "none"
       }
     ]
-  },
-  {
-    "name": "Arbitrum on xDai",
-    "chain": "AOX",
-    "rpc": [
-      "https://arbitrum.xdaichain.com/"
-    ],
-    "faucets": [],
-    "nativeCurrency": {
-      "name": "xDAI",
-      "symbol": "xDAI",
-      "decimals": 18
-    },
-    "infoURL": "https://xdaichain.com",
-    "shortName": "aox",
-    "chainId": 200,
-    "networkId": 200,
-    "explorers": [
-      {
-        "name": "blockscout",
-        "url": "https://blockscout.com/xdai/arbitrum",
-        "standard": "EIP3091"
-      }
-    ],
-    "parent": {
-      "chain": "eip155-100",
-      "type": "L2"
-    }
   },
   {
     "name": "MOAC testnet",
@@ -8629,33 +8599,6 @@
       {
         "name": "Beagle Messaging Chain Explorer",
         "url": "https://eth.beagle.chat",
-        "standard": "EIP3091"
-      }
-    ]
-  },
-  {
-    "name": "Tenet",
-    "title": "Tenet Mainnet",
-    "chain": "TENET",
-    "icon": "tenet",
-    "rpc": [
-      "https://rpc.tenet.org"
-    ],
-    "faucets": [],
-    "nativeCurrency": {
-      "name": "TENET",
-      "symbol": "TENET",
-      "decimals": 18
-    },
-    "infoURL": "https://tenet.org/",
-    "shortName": "tenet",
-    "chainId": 1559,
-    "networkId": 1559,
-    "explorers": [
-      {
-        "name": "TenetScan Mainnet",
-        "url": "https://tenetscan.io",
-        "icon": "tenet",
         "standard": "EIP3091"
       }
     ]
@@ -16472,40 +16415,6 @@
     }
   },
   {
-    "name": "Arbitrum Nova",
-    "chainId": 42170,
-    "shortName": "arb-nova",
-    "chain": "ETH",
-    "networkId": 42170,
-    "nativeCurrency": {
-      "name": "Ether",
-      "symbol": "ETH",
-      "decimals": 18
-    },
-    "rpc": [
-      "https://nova.arbitrum.io/rpc"
-    ],
-    "faucets": [],
-    "explorers": [
-      {
-        "name": "Arbitrum Nova Chain Explorer",
-        "url": "https://nova-explorer.arbitrum.io",
-        "icon": "blockscout",
-        "standard": "EIP3091"
-      }
-    ],
-    "infoURL": "https://arbitrum.io",
-    "parent": {
-      "type": "L2",
-      "chain": "eip155-1",
-      "bridges": [
-        {
-          "url": "https://bridge.arbitrum.io"
-        }
-      ]
-    }
-  },
-  {
     "name": "Celo Mainnet",
     "chainId": 42220,
     "shortName": "celo",
@@ -19840,47 +19749,6 @@
         "standard": "EIP3091"
       }
     ]
-  },
-  {
-    "name": "Arbitrum Rinkeby",
-    "title": "Arbitrum Testnet Rinkeby",
-    "chainId": 421611,
-    "shortName": "arb-rinkeby",
-    "chain": "ETH",
-    "networkId": 421611,
-    "nativeCurrency": {
-      "name": "Arbitrum Rinkeby Ether",
-      "symbol": "ETH",
-      "decimals": 18
-    },
-    "rpc": [
-      "https://rinkeby.arbitrum.io/rpc"
-    ],
-    "faucets": [
-      "http://fauceth.komputing.org?chain=421611&address=${ADDRESS}"
-    ],
-    "infoURL": "https://arbitrum.io",
-    "explorers": [
-      {
-        "name": "arbiscan-testnet",
-        "url": "https://testnet.arbiscan.io",
-        "standard": "EIP3091"
-      },
-      {
-        "name": "arbitrum-rinkeby",
-        "url": "https://rinkeby-explorer.arbitrum.io",
-        "standard": "EIP3091"
-      }
-    ],
-    "parent": {
-      "type": "L2",
-      "chain": "eip155-4",
-      "bridges": [
-        {
-          "url": "https://bridge.arbitrum.io"
-        }
-      ]
-    }
   },
   {
     "name": "Arbitrum Goerli",

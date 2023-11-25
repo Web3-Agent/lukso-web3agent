@@ -6,23 +6,23 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { CopyAll, CopyAllRounded, CopyAllSharp, LockClockOutlined, LockClockRounded, Login, LoginRounded, Power, PowerOff, Search, SearchOffOutlined } from "@mui/icons-material";
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-
+import { VscDebugDisconnect } from 'react-icons/vsc'
 
 
 const SideToggle = () => {
-  const [ open, setOpen ] = useState( true );
-  const [ currentPath, setCurrentPath ] = useState( '/' );
-  
+  const [open, setOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState('/');
+
   useEffect(() => {
-      setCurrentPath(window.location.pathname);
-  }, [] );
-  
+    setCurrentPath(window.location.pathname);
+  }, []);
+
   const Menus = [
     { title: "Home", src: "https://i.imgur.com/QMNAWX7.png", gap: true, slug: "/home" },
     { title: "Ask Agent", src: "https://i.imgur.com/2pHVHza.png", slug: "/" },
-    { title: "Send Transacetion", src: "https://i.imgur.com/XjBwspt.png", slug: "/defi-prompt" },
-    { title: "Deploy Contracts", src: "https://i.imgur.com/VT7UdPH.png", slug: "/defi-prompt" },
-    { title: "Defi", src: "https://i.imgur.com/IYxIvAB.png", slug: "/defi-prompt" },
+    // { title: "Send Transacetion", src: "https://i.imgur.com/XjBwspt.png", slug: "/defi-prompt" },
+    // { title: "Deploy Contracts", src: "https://i.imgur.com/VT7UdPH.png", slug: "/defi-prompt" },
+    // { title: "Defi", src: "https://i.imgur.com/IYxIvAB.png", slug: "/defi-prompt" },
     { title: "Manage History", src: "https://i.imgur.com/g0as0Mv.png", slug: "/manage-history" },
     { title: "View History", src: "https://i.imgur.com/TW9s7qs.png", slug: "/history" },
 
@@ -32,7 +32,7 @@ const SideToggle = () => {
     <div className="flex font-medium">
       <div
         style={{ borderTopRightRadius: "20px", borderBottomRightRadius: "20px" }}
-        className={ ` ${ open ? "w-64" : "w-20 " }
+        className={` ${open ? "w-64" : "w-20 "}
          bg-gray-100 h-screen p-5  pt-8 duration-300 rounded-tr-md rounded-br-md fixed`}
       >
         <img
@@ -56,29 +56,29 @@ const SideToggle = () => {
           </h1>
         </div>
         <ul className="pt-6">
-          { Menus.map( ( Menu, index ) => (
-          <Link href={Menu?.slug} className='text-gray-600 font-semibold'>
+          {Menus.map((Menu, index) => (
+            <Link href={Menu?.slug} className='text-gray-600 font-semibold'>
 
               <li
-                
+
                 key={index}
                 className={`flex  rounded-md p-2 cursor-pointer hover:bg-gray-300 active:bg-gray-200 text-gray-700  text-sm font-semibold items-center gap-x-4 
                 ${Menu.gap ? "mt-9" : "mt-2"} ${index === 0 && "bg-light-white"}
                   
-                   ${currentPath  === Menu?.slug ? 'bg-gray-300' : ''}
+                   ${currentPath === Menu?.slug ? 'bg-gray-300' : ''}
                   `}
-                          onClick={() => setCurrentPath(Menu?.slug)}
+                onClick={() => setCurrentPath(Menu?.slug)}
 
-                // ${router.asPath === Menu?.slug ? 'bg-gray-200' : ''}
+              // ${router.asPath === Menu?.slug ? 'bg-gray-200' : ''}
               >
                 <img height={"20px"} width={"20px"} src={Menu.src} />
 
 
-                  <span className={`${!open && "hidden"} origin-left duration-200`}>
-                    {Menu.title}
-                  </span>
+                <span className={`${!open && "hidden"} origin-left duration-200`}>
+                  {Menu.title}
+                </span>
               </li>
-          </Link>
+            </Link>
 
           ))}
         </ul>
@@ -129,8 +129,8 @@ const SideToggle = () => {
 
                       if (chain.unsupported) {
                         return (
-                          <button onClick={openChainModal} type="button">
-                            Wrong network
+                          <button className='bg-gray-300 p-2 text-xs rounded-sm hover:bg-gray-100' onClick={openChainModal} type="button">
+                            <VscDebugDisconnect className='w-6 h-6' />
                           </button>
                         );
                       }

@@ -1,11 +1,12 @@
 # WEB3AGENT - Goerli
 
 We have used [Ethereum Chain](https://ethereum.org/en/) in our project. User can deploy their contracts to [Goerli Testnet](https://goerli.etherscan.io).
+
 ## Ethereum Goerli Testnet Configs:
-Ethereum Goerli Testnet [configs link](https://github.com/Web3-Agent/Web3Agent/blob/0000a06b55b3054e9bb7285d15edd1fdfff97ce7/app/lib/chains.json#L161).
+Ethereum Goerli Testnet [configs link](https://github.com/Web3-Agent/web3agent-arb/blob/cce7297f4ec3f252b60876f197a48015bb153213/app/lib/chains.json#L160).
 
 ### Support Chain for Contract Deployment:
-- [Goerli](https://github.com/Web3-Agent/Web3Agent/blob/feaa1f8e76eca83dd2f6a54aaf4647b2189aa92a/app/lib/chains.json#L160)
+- [Goerli](https://github.com/Web3-Agent/web3agent-arb/blob/cce7297f4ec3f252b60876f197a48015bb153213/app/lib/chains.json#L160)
 
 ### Contract Deployment Commands:
 ```
@@ -16,10 +17,10 @@ Deploy this contract on Goerli.
 ### Screenshots:
 
 #### 1. Command:
-  ![alt text](https://raw.githubusercontent.com/Web3-Agent/Web3Agent/main/screenshots/goerli/command.png)
+  ![alt text](https://raw.githubusercontent.com/Web3-Agent/web3agent-arb/main/screenshots/goerli/command.png)
 
 #### 2. Deployment:
-  ![alt text](https://raw.githubusercontent.com/Web3-Agent/Web3Agent/main/screenshots/goerli/deploy.png)
+  ![alt text](https://raw.githubusercontent.com/Web3-Agent/web3agent-arb/main/screenshots/goerli/deploy.png)
 
 [Ethereum Goerli Testnet Deployed Contract Link](https://goerli.etherscan.io/tx/0x4f1b481fe8f45d2c5b3d8d6b174b286eee6be9b1c39b37ea84c27dcca5c47e94)
 
