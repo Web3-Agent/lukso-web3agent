@@ -29,6 +29,8 @@ export interface ChatProps extends React.ComponentProps<'div'> {
   id?: string
 }
 
+const VALID_CHAIN_NAME = ['mainnet', 'optimism', 'arbitrum']
+
 
 export function Chat({ id, initialMessages, className }: ChatProps) {
   const [verificationParams, setVerificationParams] = useState<VerifyContractParams>()
@@ -82,6 +84,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     chatMessages,
     functionCall
   ) => {
+    console.log("functionCall.name ", functionCall)
     if (functionCall.name === 'deploy_contract') {
       // You now have access to the parsed arguments here (assuming the JSON was valid)
       // If JSON is invalid, return an appropriate message to the model so that it may retry?
@@ -118,6 +121,546 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           {
             id: nanoid(),
             name: 'deploy_contract',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_top_nft_holder') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { contract_address: string, chain_name: string } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ args })
+
+      if (args && args?.contract_address && args?.chain_name) {
+        try {
+          let _address = args.contract_address;
+          let _chain_name = args.chain_name.toLowerCase();
+          if (!VALID_CHAIN_NAME.includes(_chain_name)) {
+            content = 'Invalid chain name'
+          } else {
+            response = await fetch(
+              `/api/top-nft-holders?address=${_address}&chain_name=${_chain_name}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+              }
+            )
+            const { message, data } = await response.json()
+            if (data && data?.length) {
+              content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+            } else {
+              content = 'No top nft holders found!'
+            }
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_top_nft_holder',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_tokens_by_symbol') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { token_symbol: string } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ args })
+
+      if (args && args?.token_symbol) {
+        try {
+          let _token_symbol = args.token_symbol.toLowerCase();;
+
+          response = await fetch(
+            `/api/tokens-by-symbol?token_symbol=${_token_symbol}&chain_name=${_token_symbol}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data } = await response.json()
+          if (data && data?.length) {
+            content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No Tokens found!'
+          }
+
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'tokens_by_symbol',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+
+    if (functionCall.name === 'show_list_of_protocols_for_wallet_address') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { address: string } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ args })
+
+      if (args && args?.address) {
+        try {
+          response = await fetch(
+            `/api/protocols?address=${args.address}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data } = await response.json()
+          if (data) {
+            content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No Protocols Details found!'
+          }
+
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_list_of_protocols_for_wallet_address',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_nft_metadata_using_contract_address_token_id_and_chain_name') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { contract_address: string, chain_name: string, token_id: string } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ args })
+
+      if (args && args?.token_id && args?.chain_name && args?.contract_address) {
+        try {
+          let _contract_address = args.contract_address;
+          let _token_id = args.token_id;
+          let _chain_name = args.chain_name.toLowerCase();
+          if (!VALID_CHAIN_NAME.includes(_chain_name)) {
+            content = 'Invalid chain name'
+          } else {
+            response = await fetch(
+              `/api/nft-metadata?contract_address=${_contract_address}&chain_name=${_chain_name}&token_id=${_token_id}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+              }
+            )
+            const { message, data } = await response.json()
+            if (data) {
+              content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+            } else {
+              content = 'No NFT Metadata Details found!'
+            }
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_nft_metadata_using_contract_address_token_id_and_chain_name',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_transaction_details_by_txn_hash_and_chain_name') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { txn_hash: string, chain_name: string } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ args })
+
+      if (args && args?.txn_hash && args?.chain_name) {
+        try {
+          let _txn_hash = args.txn_hash;
+          let _chain_name = args.chain_name.toLowerCase();
+          if (!VALID_CHAIN_NAME.includes(_chain_name)) {
+            content = 'Invalid chain name'
+          } else {
+            response = await fetch(
+              `/api/transaction?txn_hash=${_txn_hash}&chain_name=${_chain_name}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+              }
+            )
+            const { message, data } = await response.json()
+            if (data) {
+              content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+            } else {
+              content = 'No Transaction Details found!'
+            }
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_transaction_details_by_txn_hash_and_chain_name',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+
+    if (functionCall.name === 'show_coins_for_wallet_address') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { address: string, chainId: number } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ address })
+      if (args && args?.address) {
+        try {
+          response = await fetch(
+            `/api/my-account-balance?address=${args.address}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data, total } = await response.json()
+          if (data && data?.length) {
+            content = JSON.stringify({ message, total, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No coins found!'
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_coins_for_wallet_address',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_tokens_for_wallet_address') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { address: string, chainId: number } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ address })
+      if (args && args?.address) {
+        try {
+          response = await fetch(
+            `/api/tokens?address=${args.address}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data, total } = await response.json()
+          if (data && data?.length) {
+            content = JSON.stringify({ message, total, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No tokens found!'
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_tokens_for_wallet_address',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_portfolio_for_wallet_address') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { address: string, chainId: number } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ address })
+      if (args && args?.address) {
+        try {
+          response = await fetch(
+            `/api/portfolio?address=${args.address}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data, total } = await response.json()
+          if (data && data?.length) {
+            content = JSON.stringify({ message, total, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No portfolio found!'
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_portfolio_for_wallet_address',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_my_nft_balance') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { address: string, chainId: number } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ args, address })
+      if (args && args?.address) {
+        try {
+          response = await fetch(
+            `/api/nft-balance?address=${args.address}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data } = await response.json()
+          if (data && data?.length) {
+            content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No nft balance found!'
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_my_nft_balance',
+            role: role,
+            content: content,
+          }
+        ],
+        functions: functionSchemas as any
+      }
+
+      return functionResponse
+
+    }
+    if (functionCall.name === 'show_my_detailed_account_balance') {
+      // You now have access to the parsed arguments here (assuming the JSON was valid)
+      // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      const args: { account: string, chainId: number } = JSON.parse(functionCall?.arguments)
+      let response: any;
+      let content: string;
+      let role: 'system' | 'function';
+      console.log({ address })
+      if (address && address.length) {
+        try {
+          response = await fetch(
+            `/api/my-account-balance?address=${address}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+          )
+          const { message, data } = await response.json()
+          if (data && data?.length) {
+            content = JSON.stringify({ message, data }) + '\n\n' + 'Here is details.'
+          } else {
+            content = 'No account balance found!'
+          }
+          role = 'function'
+        } catch (error) {
+          content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+      } else {
+        content = "Something went wrong!!!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+        role = 'system'
+      }
+
+      const functionResponse: ChatRequest = {
+        messages: [
+          ...chatMessages,
+          {
+            id: nanoid(),
+            name: 'show_my_detailed_account_balance',
             role: role,
             content: content,
           }

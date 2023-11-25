@@ -126,7 +126,7 @@ export function DefiPromptForm({
                   )}
                 >
                   <div className="overflow-y-auto h-[calc(100vh-250px)]">
-                    {templates.map((template: string, index: number) => (
+                    {templates?.map((template: string, index: number) => (
                       <div key={index} className='flex flex-col  px-2 py-4 m-2 rounded-md border-dashed border text-sm font-semibold'>
                         <div> {template}</div>
                         <div className='text-right px-2 py-1'>

@@ -34,7 +34,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
         </div>
         <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
           <Button onClick={onExpandClick} className="rounded p-2 bg-primary text-primary-foreground flex justify-start">
-            <span>Function Call</span>
+            <span>Loading data</span>
           </Button>
           <ChatMessageActions message={message} onExpandClick={onExpandClick} />
         </div>
@@ -45,12 +45,12 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
 
   return (
     <div
-      style={{color:"black"}}
+      style={{ color: "black" }}
       className={cn('group relative mb-4 flex items-start md:-ml-12')}
       {...props}
     >
       <div
-        style={{color:"black"}}
+        style={{ color: "black" }}
         className={cn(
           'flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border shadow',
           message.role === 'user'
@@ -60,14 +60,14 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
       >
         {message.role === 'user' ? <IconUser /> : message.function_call ? <IconF /> : <IconOpenAI />}
       </div>
-      <div style={{color:"black"}} className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
+      <div style={{ color: "black" }} className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
         <MemoizedReactMarkdown
-          
-          className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
+
+          className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 overflow-auto"
           remarkPlugins={[remarkGfm, remarkMath]}
           components={{
             p({ children }) {
-              return <p style={{color:"black"}} className="mb-2 last:mb-0 text-green-800 dark:text-black">{children}</p>
+              return <p style={{ color: "black" }} className="mb-2 last:mb-0 text-green-800 dark:text-black">{children}</p>
             },
             code({ node, inline, className, children, ...props }) {
               if (children.length) {

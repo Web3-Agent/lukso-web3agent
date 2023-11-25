@@ -13,20 +13,20 @@ const exampleMessages = [
     heading: 'Ask Agent',
     message: `Explore the web3 ecosystem and find the resources that you need.`,
     imgurl: 'https://i.imgur.com/2pHVHza.png',
-    slug:'/'
+    slug: '/'
   },
-  {
-    heading: 'Send Transaction',
-    message: 'Swap your tokens, bridge them across many chains, and much more.',
-    imgurl: 'https://i.imgur.com/XjBwspt.png',
-        slug:'/defi-prompt'
+  // {
+  //   heading: 'Send Transaction',
+  //   message: 'Swap your tokens, bridge them across many chains, and much more.',
+  //   imgurl: 'https://i.imgur.com/XjBwspt.png',
+  //       slug:'/defi-prompt'
 
-  },
+  // },
   {
     heading: 'Deploy Contracts',
     message: `Create your first smart contract via prompting.`,
     imgurl: 'https://i.imgur.com/VT7UdPH.png',
-        slug:'/'
+    slug: '/'
 
   }
 ]
@@ -34,7 +34,7 @@ const exampleMessages = [
 export function Homescreen() {
   const { readTable, writeTable } = useTableland()
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center",marginTop:"4rem" }} className="w-full px-4 h-full">
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginTop: "4rem" }} className="w-full px-4 h-full">
       <div className="rounded-lg border bg-background p-10 shadow-md">
         <h1 className="text-emerald-700 text-center text-4xl font-black">
           Unlock the power of web3
@@ -64,36 +64,36 @@ export function Homescreen() {
 
           }}
         >
-          { exampleMessages.map( ( message, index ) => (
-            
-             <Link href={message?.slug} className='text-gray-600 w-full font-semibold'>
-                <button
+          {exampleMessages.map((message, index) => (
 
-                  key={index}
+            <Link href={message?.slug} className='text-gray-600 w-full font-semibold'>
+              <button
+
+                key={index}
                 // onClick={() => setInput(message.message)}
-                  style={{ margin: '7px', marginTop: '30px', height: '50px', textAlign: "left",width:"100%", paddingLeft:"8%", paddingRight:"8%" }}
+                style={{ margin: '7px', marginTop: '30px', height: '50px', textAlign: "left", width: "100%", paddingLeft: "8%", paddingRight: "8%" }}
 
-                >
-                  <div style={{ display: "flex", flexDirection: "row", alignItems: "center", backgroundColor: "#F3F4F6", borderRadius: "10px", padding: "10px", boxShadow: "initial", borderStyle: "solid", border: "3px", borderColor: "black", justifyContent: "space-between" }} >
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                      <div style={{ display: "flex", flexDirection: "row", marginLeft: "4px", marginRight: "10px", backgroundColor: "white", borderRadius: "10px", padding: "5px" }}>
-                        <img height={"40px"} width={"40px"} src={message.imgurl} alt="" />
-                      </div>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-
-                        <span className=" text-md font-semibold">{message.heading}</span>
-                        <span className=" text-sm" > {message.message}</span>
-                      </div>
-
+              >
+                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", backgroundColor: "#F3F4F6", borderRadius: "10px", padding: "10px", boxShadow: "initial", borderStyle: "solid", border: "3px", borderColor: "black", justifyContent: "space-between" }} >
+                  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <div style={{ display: "flex", flexDirection: "row", marginLeft: "4px", marginRight: "10px", backgroundColor: "white", borderRadius: "10px", padding: "5px" }}>
+                      <img height={"40px"} width={"40px"} src={message.imgurl} alt="" />
                     </div>
-                    <div  >
+                    <div style={{ display: "flex", flexDirection: "column" }}>
 
-                      <ArrowRight></ArrowRight>
+                      <span className=" text-md font-semibold">{message.heading}</span>
+                      <span className=" text-sm" > {message.message}</span>
                     </div>
+
                   </div>
+                  <div  >
 
-                </button>
-              </Link>
+                    <ArrowRight></ArrowRight>
+                  </div>
+                </div>
+
+              </button>
+            </Link>
           ))}
         </div>
       </div>
