@@ -1,4 +1,5 @@
 'use client'
+import Web3 from 'web3';
 
 import { ChatRequest, FunctionCallHandler } from "ai";
 import { useChat, type Message } from "ai/react";
@@ -24,6 +25,7 @@ import Pleaseconnect from "./pleaseconnect";
 import { useTableland } from "@/context/TablelandProvider";
 import { storeJSON } from "@/utils/saveHistory";
 import Loader from '@/components/Loader'
+import { deployContractCompile } from '../lib/functions/deploy-contract';
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
@@ -37,6 +39,76 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [polling, setPolling] = useState(false)
   const { writeTable, isLoading: tlLoading, setIsLoading } = useTableland();
   const { address, connector, isConnected } = useAccount();
+  const [_web3, _setWeb3] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [upAddress, setUPAddress] = useState('NO Address')
+  const PRIVATE_KEY = '0x3fff66d819f30d0b9167ea6a76279d0dd51b5aff267b7cf3c78cb4033404ce58'; // your EOA private key
+  // Our static variables
+  //const SAMPLE_PROFILE_ADDRESS2 = '0x6979474Ecb890a8EFE37daB2b9b66b32127237f7';
+  const SAMPLE_PROFILE_ADDRESS = "0x0e098b3a37bc7b958D8fF7F90C74396D4117d6C4"//"0xB031363560403179Aac100d51864e27fFF4D7807";
+  const RPC_ENDPOINT = 'https://rpc.testnet.lukso.gateway.fm/'//'https://rpc.testnet.lukso.network';
+  const IPFS_GATEWAY = 'https://api.universalprofile.cloud/ipfs';
+  const deployContract = async (abi: any, bytecode: string) => {
+    try {
+      console.log({ _web3 })
+      // return
+      const accounts = await _web3.eth.getAccounts();
+      const networkId = await _web3.eth.net.getId();
+      // const deployedNetwork = YourContract.networks[networkId];
+      console.log({ accounts, networkId, contract: _web3.eth })
+      const contract = new _web3.eth.Contract(
+        abi,
+        // deployedNetwork && deployedNetwork.address
+      );
+      console.log({ contract })
+
+      // Deploy the contract
+      const deployedContract = await contract.deploy({
+        data: bytecode //'0x608060405234801561001057600080fd5b50610150806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c8063209652551461003b5780635524107714610059575b600080fd5b610043610075565b60405161005091906100a1565b60405180910390f35b610073600480360381019061006e91906100ed565b61007e565b005b60008054905090565b8060008190555050565b6000819050919050565b61009b81610088565b82525050565b60006020820190506100b66000830184610092565b92915050565b600080fd5b6100ca81610088565b81146100d557600080fd5b50565b6000813590506100e7816100c1565b92915050565b600060208284031215610103576101026100bc565b5b6000610111848285016100d8565b9150509291505056fea2646970667358221220b3b2069a048a1d96ad53edb78bc7a2ba0772623cf46ba9c9b64b03dfb2006e0b64736f6c63430008150033',
+      }).send({
+        from: accounts[0],
+        gas: '3000000', // Adjust gas value according to your contract
+      });
+      console.log({ deployedContract })
+
+      console.log('Contract deployed at:', deployedContract.options.address, deployedContract);
+      setContract(deployedContract);
+      return deployedContract.options.address
+    } catch (error) {
+      console.error('Error deploying contract:', error);
+    }
+  };
+  useEffect(() => {
+    const initializeWeb3 = async () => {
+      console.log({ window })
+      // Modern DApp browsers like MetaMask inject a web3 instance
+      if (window.ethereum) {
+        const web3Instance = new Web3(window.ethereum);
+        try {
+          // Request account access if needed
+          await window.ethereum.enable();
+          _setWeb3(web3Instance);
+        } catch (error) {
+          console.error('User denied account access');
+        }
+      }
+      // Legacy dApp browsers
+      else if (window.web3) {
+        const web3Instance = new Web3(window.web3.currentProvider);
+        let myWeb3 = new Web3(web3Instance);
+
+        _setWeb3(myWeb3);
+        // const oldProvider = web3.currentProvider; // keep a reference to metamask provider
+
+      }
+      // Non-dApp browsers
+      else {
+        console.log('No web3 instance detected');
+      }
+    };
+
+    initializeWeb3();
+  }, []);
   useEffect(() => {
     const verifyFunction = async (verificationParams: VerifyContractParams) => {
       if (verificationParams) {
@@ -88,49 +160,105 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     if (functionCall.name === 'deploy_contract') {
       // You now have access to the parsed arguments here (assuming the JSON was valid)
       // If JSON is invalid, return an appropriate message to the model so that it may retry?
+      try {
 
-      const response = await fetch(
-        '/api/deploy-contract',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: functionCall.arguments
-        })
-
-      let content: string;
-      let role: 'system' | 'function';
-
-      if (response.ok) {
-        const { explorerUrl, ipfsUrl, verificationParams } = await response.json()
-        setVerificationParams(verificationParams)
-        setPolling(true)
-        content = JSON.stringify({ explorerUrl, ipfsUrl }) + '\n\n' + 'Your contract will be automativally verified after 4 block confirmations. Keep this tab open.'
-        role = 'function'
-
-      } else {
-        const { error } = await response?.json() ?? {}
-        content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
-        role = 'system'
-      }
-
-      const functionResponse: ChatRequest = {
-        messages: [
-          ...chatMessages,
+        const response = await fetch(
+          '/api/get-contract-compile',
           {
-            id: nanoid(),
-            name: 'deploy_contract',
-            role: role,
-            content: content,
-          }
-        ],
-        functions: functionSchemas as any
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: functionCall.arguments
+          });
+
+        let content: string;
+        let role: 'system' | 'function';
+
+        if (response.ok) {
+          const { abi, bytecode, } = await response.json()
+          console.log({ abi, bytecode })
+          const contractAddress = await deployContract(abi, bytecode)
+          content = JSON.stringify({ contractAddress, abi, bytecode }) + '\n\n' + 'Your contract is compiled.'
+          role = 'function'
+
+        } else {
+          content = "No ABI and Bytecode found" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+
+        const functionResponse: ChatRequest = {
+          messages: [
+            ...chatMessages,
+            {
+              id: nanoid(),
+              name: 'deploy_contract',
+              role: role,
+              content: content,
+            }
+          ],
+          functions: functionSchemas as any
+        }
+
+        return functionResponse
+
+      } catch (error) {
+        console.log("error=> ", error)
       }
-
-      return functionResponse
-
     }
+    // if (functionCall.name === 'deploy_contract') {
+    //   try {
+    //     // You now have access to the parsed arguments here (assuming the JSON was valid)
+    //     // If JSON is invalid, return an appropriate message to the model so that it may retry?
+    //     console.log({ "functionCall": functionCall })
+    //     const args = JSON.parse(functionCall?.arguments)
+    //     console.log({ args })
+    //     const response = await deployContract(args.abi, args.bytecode)
+    //     // const response = await fetch(
+    //     //   '/api/deploy-contract',
+    //     //   {
+    //     //     method: 'POST',
+    //     //     headers: {
+    //     //       'Content-Type': 'application/json'
+    //     //     },
+    //     //     body: functionCall.arguments
+    //     //   })
+
+    //     let content: string;
+    //     let role: 'system' | 'function';
+    //     console.log({ response })
+    //     if (response.ok) {
+    //       const { explorerUrl, ipfsUrl, verificationParams } = await response.json()
+    //       setVerificationParams(verificationParams)
+    //       setPolling(true)
+    //       content = JSON.stringify({ explorerUrl, ipfsUrl }) + '\n\n' + 'Your contract will be automativally verified after 4 block confirmations. Keep this tab open.'
+    //       role = 'function'
+
+    //     } else {
+    //       const { error } = await response?.json() ?? {}
+    //       content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+    //       role = 'system'
+    //     }
+
+    //     const functionResponse: ChatRequest = {
+    //       messages: [
+    //         ...chatMessages,
+    //         {
+    //           id: nanoid(),
+    //           name: 'deploy_contract',
+    //           role: role,
+    //           content: content,
+    //         }
+    //       ],
+    //       functions: functionSchemas as any
+    //     }
+
+    //     return functionResponse
+
+    //   } catch (error) {
+    //     console.log("error => ", error)
+    //   }
+    // }
     if (functionCall.name === 'show_top_nft_holder') {
       // You now have access to the parsed arguments here (assuming the JSON was valid)
       // If JSON is invalid, return an appropriate message to the model so that it may retry?

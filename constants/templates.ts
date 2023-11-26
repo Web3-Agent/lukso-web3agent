@@ -64,6 +64,18 @@ export const PROMPT_COMMANDS = [
     }
 ];
 
+export const LUKSO_DEPLOYMENT_COMMANDS = [
+    {
+        action: 'CREATE_CONTRACT',
+        message: 'Write a simple contract that stores a value.',
+        note: 'Once contract created, please select below chain/network to deploy contract'
+    },
+    {
+        action: 'DEPLOY_LUKSO_TESTNET',
+        message: 'Deploy this contract on Lukso Testnet.',
+    },
+];
+
 export const LINEA_DEPLOYMENT_COMMANDS = [
     {
         action: 'CREATE_CONTRACT',
