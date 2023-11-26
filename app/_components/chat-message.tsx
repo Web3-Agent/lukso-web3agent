@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-
+import { TbWorldSearch } from "react-icons/tb";
 import { cn } from '@/app/lib/utils'
 import { CodeBlock } from '@/app/_components/ui/codeblock'
 import { MemoizedReactMarkdown } from '@/app/_components/markdown'
@@ -30,11 +30,11 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
         <div
           className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border shadow bg-primary text-primary-foreground"
         >
-          <IconF />
+          <TbWorldSearch className="dark:text-white text-black" />
         </div>
         <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
           <Button onClick={onExpandClick} className="rounded p-2 bg-primary text-primary-foreground flex justify-start">
-            <span>Loading data</span>
+            <span>Looking Action</span>
           </Button>
           <ChatMessageActions message={message} onExpandClick={onExpandClick} />
         </div>
@@ -58,7 +58,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             : 'bg-primary text-primary-foreground'
         )}
       >
-        {message.role === 'user' ? <IconUser /> : message.function_call ? <IconF /> : <IconOpenAI />}
+        {message.role === 'user' ? <IconUser /> : message.function_call ? <TbWorldSearch className="dark:text-white text-black" /> : <IconOpenAI />}
       </div>
       <div style={{ color: "black" }} className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
         <MemoizedReactMarkdown

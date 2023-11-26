@@ -1,12 +1,11 @@
 import { ChatCompletionFunctions } from "openai-edge";
-
 export const functionSchemas: ChatCompletionFunctions[] = [
     {
         name: 'deploy_contract',
         description: 'Deploy a smart contract',
         parameters: {
             type: 'object',
-            description: `This function deploys a smart contract to an EVM compatible chain.  It returns the tx hash of the deployment and an IPFS url to a directory of files used for the contract.  Only call this function in a separate chat message do not call it from a message with other text.  Share the explorer url and ipfs url with the user and make the links open in new tab.`,
+            description: `This function complie a smart contract to an EVM compatible chain. It returns the contract address, bytecode, and abi. Print contract address, abi and bytecode.  Only call this function in a separate chat message do not call it from a message with other text.`,
             properties: {
                 contractName: {
                     type: 'string',
