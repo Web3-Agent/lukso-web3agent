@@ -26,6 +26,7 @@ import { useTableland } from "@/context/TablelandProvider";
 import { storeJSON } from "@/utils/saveHistory";
 import Loader from '@/components/Loader'
 import { deployContractCompile } from '../lib/functions/deploy-contract';
+import { useGetTxReceipt } from '../../data/tx/getTxReceipt';
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
@@ -890,6 +891,49 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       return functionResponse
 
     }
+    if (functionCall.name === 'get_receipt_by_hash') {
+      try {
+        // You now have access to the parsed arguments here (assuming the JSON was valid)
+        // If JSON is invalid, return an appropriate message to the model so that it may retry?
+        const args: { hash: string } = JSON.parse(functionCall?.arguments)
+        let response: any;
+        let content: string;
+        let role: 'system' | 'function';
+        if (args && args?.hash) {
+          try {
+            let data = await useGetTxReceipt(args.hash)
+            console.log({ data })
+            content = JSON.stringify({ message: "Transaction Receipt", data }) + '\n\n' + 'Here is transaction receipt details.'
+            console.log({ content })
+            role = 'function'
+          } catch (error) {
+            console.log("ERROROR ", error)
+            content = JSON.stringify({ error }) + '\n\n' + 'Try to fix the error and show the user the updated code.'
+            role = 'system'
+          }
+        } else {
+          content = "Hash is required!" + '\n\n' + 'Try to fix the error and show the user the updated code.'
+          role = 'system'
+        }
+        const functionResponse: ChatRequest = {
+          messages: [
+            ...chatMessages,
+            {
+              id: nanoid(),
+              name: 'get_receipt_by_hash',
+              role: role,
+              content: content,
+            }
+          ],
+          functions: functionSchemas as any
+        }
+
+        return functionResponse
+
+      } catch (error) {
+        console.log("get_receipt_by_hash -> error: ", error)
+      }
+    }
 
     if (functionCall.name === 'get_gas_price') {
       // You now have access to the parsed arguments here (assuming the JSON was valid)
@@ -1063,7 +1107,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       {tlLoading && <Loader showCloseIcon onClick={setIsLoading} />}
       {isConnected ? (<>
 
-        {console.log({ messages })}
+        {/* {console.log({ messages })} */}
         <div className={cn('pb-[200px] pt-4 md:pt-10 w-full', className)}>
           {messages.length > 1 ? (
             <>
@@ -1076,7 +1120,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         </div>
         <ChatPanel
           backupChat={() => {
-            console.log({ messages });
+            // console.log({ messages });
             makeBackUpChat();
           }}
           id={id}
