@@ -69,7 +69,7 @@ export default function ConnectWallet ()
     }
     return (
     <div>
-        <button
+      <button
         style={{background:"#388E3C", color:"white",padding:"10px",fontsize:"10px", borderRadius:"8px",marginTop:"8px"}}
         disabled={connecting}
         onClick={() => connect()}>
