@@ -228,6 +228,20 @@ export const functionSchemas: ChatCompletionFunctions[] = [
         }
     },
     {
+        name: 'get_receipt_by_hash',
+        description: 'Get Transaction Receipt',
+        parameters: {
+            type: 'object',
+            description: `This function gets transaction receipt. It returns message and data. data will have status, from, to and gasUsed, print them all. Only call this function in a separate chat message do not call it from a message with other text.`,
+            properties: {
+                hash: {
+                    type: 'string',
+                },
+            },
+            required: ['hash']
+        }
+    },
+    {
         name: 'get_transaction_by_hash',
         description: 'Get Transaction Info',
         parameters: {

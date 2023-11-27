@@ -135,4 +135,10 @@ export const WEB3_COMMANDS = [
         action: 'GAS_PRICE_ETH',
         message: 'Give me the gas price of Ethereum.',
     },
+    {
+        action: 'GET_RECEIPT',
+        message: 'Get receipt for hash __HASH__',
+        note: `Eg: Get receipt for hash 0x87324cefffc1ce22d6b64196d31eac660a4cc7877db0e6cec77ff28d9aad3e32`
+
+    },
 ]
