@@ -18,6 +18,8 @@ import { SmartAccountProvider } from '../providers/smart-account.provider';
 import { Web3Provider } from "../auth/Web3";
 import SideToggle from '@/app/_components/sidetoggle';
 import { TablelandProvider } from '@/context/TablelandProvider';
+import { Web3OnboardConfig } from '../auth/Web3OnboardConfig';
+
 
 // const arbitrumSepolia = ({
 //   id: 421614,
@@ -51,11 +53,6 @@ import { TablelandProvider } from '@/context/TablelandProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
-
-// export const metadata = {
-//   title: 'Web3Agent',
-//   description: 'Web3 Agent AI',
-// }
 export default function RootLayout({
 
   children,
@@ -68,9 +65,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers attribute="class" defaultTheme="system" enableSystem>
-          {/* <WagmiConfig client={ wagmiClient }> */}
-          <Web3Provider>
+          {/* <WagmiConfig client={ wagmiClient }> */ }
+        <Web3OnboardConfig>
 
+          <Web3Provider>
             <SmartAccountProvider>
               <AuthProvider>
                 <TablelandProvider>
@@ -103,8 +101,10 @@ export default function RootLayout({
                   </OperationsProvider>
                 </TablelandProvider>
               </AuthProvider>
-            </SmartAccountProvider>
-          </Web3Provider>
+              </SmartAccountProvider>
+            </Web3Provider>
+                          </Web3OnboardConfig>
+
         </Providers>
       </body>
     </html>

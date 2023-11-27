@@ -7,11 +7,48 @@ import { CopyAll, CopyAllRounded, CopyAllSharp, LockClockOutlined, LockClockRoun
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import { VscDebugDisconnect } from 'react-icons/vsc'
+import ConnectWallet from '../../auth/ConnectWallet';
+
+
+
+
+
+
+
+// const connect: ConnectModalOptions = {
+//   iDontHaveAWalletLink:
+//     "https://chrome.google.com/webstore/detail/universal-profiles/abpickdkkbnbcoepogfhkhennhfhehfn?hl=en",
+//   removeWhereIsMyWalletWarning: true,
+// };
+
+// const onboard = Onboard({
+//   wallets,
+//   chains,
+//   appMetadata,
+//   connect,
+// });
+
+// const connectedWallets = await onboard.connectWallet();
+// console.log( connectedWallets );
+
+
+
+
+
+
+
+
+
+
 
 
 const SideToggle = () => {
   const [open, setOpen] = useState(false);
-  const [currentPath, setCurrentPath] = useState('/');
+  const [ currentPath, setCurrentPath ] = useState( '/' );
+  
+
+
+
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -84,7 +121,9 @@ const SideToggle = () => {
         </ul>
         <ul style={{ position: "absolute", bottom: "10px", }}  >
           <span style={{ width: "100%", fontSize: "13px" }} className={`${!open && "hidden"} origin-left duration-200`}>
-            <ConnectButton chainStatus="icon" showBalance={false} ></ConnectButton>
+            <ConnectButton chainStatus="icon" showBalance={ false } ></ConnectButton>
+            
+            <ConnectWallet />
           </span>
           <span className={`${open && "hidden"} origin-left duration-200`}>
             <ConnectButton.Custom>
@@ -97,8 +136,7 @@ const SideToggle = () => {
                 authenticationStatus,
                 mounted,
               }) => {
-                // Note: If your app doesn't use authentication, you
-                // can remove all 'authenticationStatus' checks
+        
                 const ready = mounted && authenticationStatus !== 'loading';
                 const connected =
                   ready &&
@@ -162,15 +200,11 @@ const SideToggle = () => {
                                 )}
                               </div>
                             )}
-                            {/* {chain.name} */}
                           </button>
 
                           <button style={{ background: "green", color: "white", padding: "5px", borderRadius: "50%", height: "30px", width: "30px", fontSize: "15px" }} onClick={openAccountModal} type="button">
-                            {/* { account.displayName } */}
                             <CopyAll fontSize="15px" ></CopyAll>
-                            {/* {account.displayBalance
-                                ? ` (${account.displayBalance})`
-                                : ''} */}
+                           
                           </button>
                         </div>
                       );
@@ -182,9 +216,7 @@ const SideToggle = () => {
           </span>
         </ul>
       </div>
-      {/* <div className="h-screen flex-1 p-7">
-        <h1 className="text-2xl font-semibold ">Home Page</h1>
-      </div> */}
+     
     </div>
   );
 };
