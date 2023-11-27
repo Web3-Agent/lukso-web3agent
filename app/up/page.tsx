@@ -6,6 +6,14 @@ import { LSPFactory } from '@lukso/lsp-factory.js';
 import { ERC725, ERC725JSONSchema } from '@erc725/erc725.js';
 // import upMetadataSchema from '@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json';
 import lsp3ProfileSchema from '@erc725/erc725.js/schemas/LSP3ProfileMetadata.json' assert { type: 'json' };
+import { useConnectWallet } from '@web3-onboard/react'
+
+interface Account {
+    address: string,
+    balance: Record<TokenSymbol, string> | null,
+    ens: { name: string | undefined, avatar: string | undefined }
+    uns:string
+}
 
 export default function UniversalProfile() {
     const [_web3, _setWeb3] = useState(null);
@@ -19,6 +27,32 @@ export default function UniversalProfile() {
     // const RPC_ENDPOINT = 'https://rpc.testnet.lukso.gateway.fm'
     // const RPC_ENDPOINT = 'https://rpc.l16.lukso.network'
     const IPFS_GATEWAY = 'https://api.universalprofile.cloud/ipfs';
+
+
+    const [account, setAccount] = useState<Account | null>(null)
+    const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
+
+    useEffect( () =>
+  {
+    
+    try {
+      
+  
+        if (wallet?.provider) {
+        const { name, avatar } = wallet?.accounts[0]?.ens ?? {};
+        setAccount({
+            address: wallet?.accounts[0]?.address,
+            balance: wallet?.accounts[ 0 ]?.balance,
+            uns:wallet?.accounts[0]?.uns,
+            ens: { name, avatar: avatar?.url }
+        } )
+        }
+      
+        } catch (error) {
+    console.log("userprofile error is ==========>>>>>>>>",error)
+  }
+  }, [wallet])
+
     useEffect(() => {
         const initializeWeb3 = async () => {
             console.log({ window })
@@ -183,7 +217,8 @@ export default function UniversalProfile() {
         <div className='h-screen bg-green-200 w-full flex justify-center items-center'>
             <div className='w-1/2  flex flex-col gap-4' >
                 <div >
-                    <input className='w-full p-2 bg-white text-gray-800 rounded-sm' value={upAddress} />
+                    <input className='w-full p-2 bg-white text-gray-800 rounded-sm' value={ upAddress } />
+                    {JSON.stringify(account)}
                 </div>
                 <div >
                     <button

@@ -60,10 +60,10 @@ export default function ConnectWallet ()
   if(wallet?.provider && account) {
     return (
         <div>
-            {/* {account?.ens?.avatar ? (<img src={account?.ens?.avatar} alt="ENS Avatar" />) : null}
+            {account?.ens?.avatar ? (<img src={account?.ens?.avatar} alt="ENS Avatar" />) : null}
           <div>{ account?.ens?.name ? account?.ens.name : account?.address }</div>
           <div>Connected to {wallet.label}</div>
-          <button onClick={() => { disconnect({ label: wallet.label }) }}>Disconnect</button> */}
+          <button onClick={() => { disconnect({ label: wallet.label }) }}>Disconnect</button>
         </div>
     )
     }

@@ -83,11 +83,11 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     const initializeWeb3 = async () => {
       console.log({ window })
       // Modern DApp browsers like MetaMask inject a web3 instance
-      if (window.ethereum) {
-        const web3Instance = new Web3(window.ethereum);
+      if (window.lukos) {
+        const web3Instance = new Web3(window.lukos);
         try {
           // Request account access if needed
-          await window.ethereum.enable();
+          await window.lukos.enable();
           _setWeb3(web3Instance);
         } catch (error) {
           console.error('User denied account access');
